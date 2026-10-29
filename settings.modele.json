@@ -1,0 +1,33 @@
+{
+  "model": "sonnet",
+  "advisorModel": "fable",
+  "autoCompactWindow": 160000,
+  "workflowSizeGuideline": "small",
+  "modelSettings": {
+    "claude-opus-5-5":   { "effortLevel": "medium" },
+    "claude-sonnet-5-5": { "effortLevel": "medium" }
+  },
+  "env": { "CLAUDE_CODE_DISABLE_1M_CONTEXT": "1", "BASH_MAX_OUTPUT_LENGTH": "15000" },
+  "permissions": { "deny": ["CronCreate","CronDelete","CronList","RemoteTrigger","PushNotification",
+    "NotebookEdit","EnterWorktree","ExitWorktree",
+    "Agent(general-purpose)","Agent(claude)","Agent(Plan)"] },
+  "statusLine": { "type": "command", "command": "\"<python.exe>\" \"<…>/.claude/hooks/conso_5h.py\"" },
+  "hooks": {
+    "UserPromptSubmit": [ { "hooks": [
+      { "type": "command", "command": "\"<python.exe>\" \"<…>/.claude/hooks/claude_md_taille.py\"" },
+      { "type": "command", "command": "\"<python.exe>\" \"<…>/.claude/hooks/suivi_taille.py\"" },
+      { "type": "command", "command": "\"<python.exe>\" \"<…>/.claude/hooks/pause_longue.py\"" },
+      { "type": "command", "command": "\"<python.exe>\" \"<…>/.claude/hooks/boucle_compact.py\"" } ] },
+      { "hooks": [ { "type": "command", "command": "<…>/.local/bin/claude-office-hook.exe user_prompt_submit", "timeout": 2 } ] } ],
+    "SessionStart":      [ { "hooks": [ { "type": "command", "command": "<…>/.local/bin/claude-office-hook.exe session_start", "timeout": 2 } ] } ],
+    "SessionEnd":        [ { "hooks": [ { "type": "command", "command": "<…>/.local/bin/claude-office-hook.exe session_end", "timeout": 2 } ] } ],
+    "PreToolUse":        [ { "matcher": ".*", "hooks": [ { "type": "command", "command": "<…>/.local/bin/claude-office-hook.exe pre_tool_use", "timeout": 2 } ] } ],
+    "PostToolUse":       [ { "matcher": ".*", "hooks": [ { "type": "command", "command": "<…>/.local/bin/claude-office-hook.exe post_tool_use", "timeout": 2 } ] } ],
+    "PermissionRequest": [ { "matcher": ".*", "hooks": [ { "type": "command", "command": "<…>/.local/bin/claude-office-hook.exe permission_request", "timeout": 2 } ] } ],
+    "Notification":      [ { "matcher": ".*", "hooks": [ { "type": "command", "command": "<…>/.local/bin/claude-office-hook.exe notification", "timeout": 2 } ] } ],
+    "Stop":              [ { "hooks": [ { "type": "command", "command": "<…>/.local/bin/claude-office-hook.exe stop", "timeout": 2 } ] } ],
+    "SubagentStart":     [ { "matcher": ".*", "hooks": [ { "type": "command", "command": "<…>/.local/bin/claude-office-hook.exe subagent_start", "timeout": 2 } ] } ],
+    "SubagentStop":      [ { "matcher": ".*", "hooks": [ { "type": "command", "command": "<…>/.local/bin/claude-office-hook.exe subagent_stop", "timeout": 2 } ] } ],
+    "PreCompact":        [ { "hooks": [ { "type": "command", "command": "<…>/.local/bin/claude-office-hook.exe pre_compact", "timeout": 10 } ] } ]
+  }
+}

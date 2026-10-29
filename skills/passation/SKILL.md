@@ -1,0 +1,43 @@
+---
+name: passation
+description: À lancer quand Nolann dit « passation », « nouvelle conversation », « change de conv », « end of » ou quand une conversation est trop lourde (compactions en boucle, base > ~100 k). Vérifie que SUIVI.md est propre, crée la nouvelle conversation (bon modèle/effort, brief « lis SUIVI.md et continue ») puis, une fois Nolann passé sur la nouvelle, supprime l'ancienne sur son oui (jamais archiver : ça garde la place).
+---
+
+# Passation en un clic
+
+But : changer de conversation souvent, sans copier-coller et sans perte. Outils : `mcp__ccd_session__start_session`, `mcp__ccd_session_mgmt__delete_session` (à charger avec ToolSearch s'ils sont différés).
+
+## 1. Conditions (sinon on reste ici et on dit ce qui manque)
+- **Anti-multiplication (27/10)** : AVANT toute création, `list_sessions` : s'il existe déjà une conversation de même titre/dossier plus récente (passation déjà faite, Nolann est resté sur l'ancienne), NE PAS en créer une autre : dire « passation déjà faite : [titre](#id), va dessus » et s'arrêter. Après chaque passation, dire clairement « ne reste pas ici ». Un `fork` n'est jamais une passation.
+- Lot en cours terminé (ou arrêté proprement), rien d'à moitié écrit.
+- `SUIVI.md` du projet **réécrit propre** : décisions en vigueur, liste des OK validés, « pourquoi » des décisions orales, ce qui n'a pas marché, **prochain pas exact**. Le réécrire maintenant si besoin (commit si le projet le fait).
+- Si le chantier a un script de non-régression : il est vert.
+- Travail non commité important : le dire ; ne rien commiter sans accord.
+
+## 2. Choix (un seul pop-up `AskUserQuestion`)
+Modèle/effort de la nouvelle conversation, ma recommandation en premier : Sonnet medium par défaut ; Opus medium si conception floue ; Opus ultracode seulement pour une architecture majeure. **Règle dure : session actuelle en Opus + maquette/conception en cours = la nouvelle session RESTE en Opus (même effort) ; on ne redescend sur Sonnet que quand le lot de conception est fini.** Limite : `start_session` ignore un modèle plus puissant que celui de la session actuelle. Depuis Sonnet, pour Opus : le dire et proposer à Nolann d'ouvrir lui-même la conversation Opus (le brief est prêt, il le colle).
+
+## 3. Création
+`start_session` : `initiation: "user_asked"`, `context: "fresh"`, même dossier (`use_worktree` comme la session actuelle), `title` = sujet court, `model`/`effort` choisis, `background` (≥ 80 car. : projet, objectif, où en est le lot), `prompt` : « Lis SUIVI.md (et CLAUDE.md) puis continue au "Prochain pas exact". Ne refais pas ce qui est validé. Supprime la note de passation une fois lue. » + 2-3 lignes de ce qui compte à l'oral et n'est pas dans SUIVI.md.
+Ne jamais utiliser `fork` (il copie tout le contexte lourd, donc aucun gain).
+**Renommage « à supprimer » (demande de Nolann 27/10, à ne jamais oublier)** : juste après `start_session`, l'ANCIENNE session se renomme elle-même (`set_session_title` avec `session_id: "self"`, titre = `<titre actuel> (à supprimer)`), pour que Nolann voie d'un coup d'œil quoi supprimer s'il y a un oubli. Le brief de la nouvelle donne alors le titre AVEC le suffixe « (à supprimer) » (c'est ce titre que `list_sessions` montrera). Si le renommage est refusé, le dire et continuer. À faire aussi en mode autonome (§5).
+**Rangement (27/10)** : juste après `start_session`, 1) `detach_session` sur l'id reçu (la nouvelle devient une conversation principale, plus un sous-arbre) ; 2) `move_sessions` vers le groupe de l'ancienne (champ `group` de `list_sessions`, ou groupe du dossier si l'ancienne n'en a pas ; aucun groupe connu = laisser sans groupe, ne pas deviner). Si `start_session` est refusé (session lancée par une autre session), il faut une parole de Nolann dans la conversation. **Le brief doit toujours contenir le titre exact (suffixe « (à supprimer) » compris) + dossier de l'ancienne** (le dossier de `list_sessions` est celui de LANCEMENT, pas le sous-dossier de travail : le vérifier dans `list_sessions`, sinon la nouvelle refuse pour « dossier différent ») (sinon la nouvelle ne sait pas quoi supprimer, §4).
+
+## 4. Suppression de l'ancienne (décision de Nolann 27/10 : supprimer, pas archiver ; ne jamais rester bloqué)
+Dire en une ligne « nouvelle conversation créée : [titre](#id) ». Une session ne connaît pas son propre id (`list_sessions` l'exclut) : le brief de la nouvelle donne donc le **titre exact** et le dossier de l'ancienne + les ids déjà en attente (chaîne), et la nouvelle retrouve l'id de l'ancienne avec `list_sessions` (la plus récente de même titre, inactive). Ne jamais écrire un id deviné dans SUIVI.md. Une seule demande `delete_session` (jusqu'à 25 ids) = **une seule carte** pour Nolann, qui la clique quand il veut. `delete_session` ne vise jamais la session courante : la demande part de la nouvelle.
+- **Résumé git obligatoire (27/10)** : à chaque passation ou remplacement, la conversation SORTANTE lance dans SON dossier de travail `git status --short` et `git log origin/master..HEAD --oneline` (adapter la branche de base si ce n'est pas master) et RENDS ce résumé (fichiers non commités, commits non poussés, ou « rien »). **Sans ce résumé, on ne propose pas la suppression** (pas de carte `delete_session`). Résumé non vide = travail à commiter/pousser d'abord, ou le dire à Nolann et ne pas supprimer. Le brief de la nouvelle exige ce résumé de l'ancienne ; si l'ancienne est déjà fermée, la nouvelle le lance elle-même dans le dossier indiqué.
+- **Remplacement ≠ chantier parallèle (28/10)** : on ne propose la suppression QUE d'une conversation explicitement REMPLACÉE par une passation. Deux conversations sur deux chantiers (worktrees différents) sont parallèles : jamais proposées à la suppression l'une pour l'autre. Une session qui en lance ou en voit une autre le dit à Nolann en une ligne (« chantier parallèle, pas un remplacement ») et chaque titre commence par le chantier : « [Chantier A] … », « [Chantier B] … ». Fichiers partagés (un composant commun, SUIVI.md) et ordre de push (un push sur master redéploie) à annoncer par les deux sessions.
+- **Sans doute** (ancienne finie, SUIVI.md repris, nouvelle démarrée) : la nouvelle la demande seule, en **fin de tour** (jamais en plein travail), et continue sans attendre le clic ; l'ancienne reste inoffensive en attendant.
+- **Au moindre doute** (travail non commité dans l'ancienne, ancienne encore active ou épinglée, id incertain) : ne pas supprimer, le dire.
+- Jamais supprimer ni archiver autre chose.
+
+## 5. Mode autonome (Nolann dit « fonce », ou le hook `boucle_compact` signale une boucle, présent ou non : on ne lui demande rien, on fait la passation et on le dit après)
+Aucun pop-up pour la passation. Modèle choisi selon le travail à venir, sans demander (session en Opus + conception en cours = reste en Opus, même effort, voir §2) : Sonnet medium si on code ; Opus (medium, ou ultracode pour une maquette/architecture) si le prochain pas est une conception. Depuis Sonnet, `start_session` ne peut pas monter vers Opus : créer en Sonnet, puis UN pop-up `AskUserQuestion` « passer cette conversation en Opus ? » (Nolann voit la notif et répond quand il passe ; pendant ce temps, continuer ce qui ne demande pas Opus), SUIVI.md propre (§1), puis §3 et §4.
+
+## Limite connue (test 27/10)
+`start_session` est refusé à une session lancée par une autre session (la consigne ne vient pas de Nolann) : dans ce cas la nouvelle apparaît en carte à cliquer. Une session ouverte par Nolann lui-même n'a pas cette limite.
+
+## Rappels
+- S'il s'absente : ne rien demander, ne rien supprimer ; SUIVI.md propre suffit.
+- Une passation ne dépend jamais de la suppression précédente : si une nouvelle est nécessaire alors que la carte précédente n est pas cliquée, la nouvelle reprend les ids en attente dans son brief (chaîne) et demande une seule suppression groupée.
+- Ligne de registre à ajouter dans `C:\pipeline\docs\registre-config.md` à chaque modification de ce skill.
