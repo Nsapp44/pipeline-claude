@@ -35,9 +35,12 @@ Dire en une ligne « nouvelle conversation créée : [titre](#id) ». Une sessio
 Aucun pop-up pour la passation. Modèle choisi selon le travail à venir, sans demander (session en Opus + conception en cours = reste en Opus, même effort, voir §2) : Sonnet medium si on code ; Opus (medium, ou ultracode pour une maquette/architecture) si le prochain pas est une conception. Depuis Sonnet, `start_session` ne peut pas monter vers Opus : créer en Sonnet, puis UN pop-up `AskUserQuestion` « passer cette conversation en Opus ? » (Nolann voit la notif et répond quand il passe ; pendant ce temps, continuer ce qui ne demande pas Opus), SUIVI.md propre (§1), puis §3 et §4.
 
 ## Limite connue (test 27/10)
-`start_session` est refusé à une session lancée par une autre session (la consigne ne vient pas de Nolann) : dans ce cas la nouvelle apparaît en carte à cliquer. Une session ouverte par Nolann lui-même n'a pas cette limite.
+**La passation est toujours faite par la conversation principale, jamais par un agent.** `start_session` est refusé à une session lancée par une autre session (la consigne ne vient pas de Nolann) : dans ce cas la nouvelle apparaît en carte à cliquer. Une session ouverte par Nolann lui-même n'a pas cette limite. `start_session` ne passe aussi que dans un tour lancé par un message de Nolann : un tour déclenché par la notification d'un agent, un hook, un `<side-sessions-event>` ou le message d'une autre session est refusé (29/10/2026, la carte à cliquer faisait croire à Nolann que c'était un agent qui voulait ouvrir une conversation).
+- Passation due pendant qu'un agent tourne : lancer la nouvelle session AVANT de finir le tour de Nolann, ou lancer le dernier agent au premier plan (`run_in_background: false`). Ne jamais attendre la notification de l'agent pour la faire.
+- Déjà dans un tour qui ne vient pas de Nolann : ne pas tenter `user_asked`. Préparer le brief et le SUIVI, puis dire en une ligne « passation prête, réponds-moi un mot pour que je la lance ». La carte `own_initiative` reste le dernier recours.
 
 ## Rappels
 - S'il s'absente : ne rien demander, ne rien supprimer ; SUIVI.md propre suffit.
 - Une passation ne dépend jamais de la suppression précédente : si une nouvelle est nécessaire alors que la carte précédente n est pas cliquée, la nouvelle reprend les ids en attente dans son brief (chaîne) et demande une seule suppression groupée.
 - Ligne de registre à ajouter dans `C:\pipeline\docs\registre-config.md` à chaque modification de ce skill.
+- Le brief de la nouvelle conversation rappelle la règle advisor du CLAUDE.md global : appel obligatoire avant de figer l'approche et avant « fini » sur un gros chantier (l'outil est dans la session si `advisorModel` est réglé).
