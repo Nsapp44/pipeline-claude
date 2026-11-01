@@ -15,9 +15,7 @@
   "hooks": {
     "UserPromptSubmit": [ { "hooks": [
       { "type": "command", "command": "\"<python.exe>\" \"<…>/.claude/hooks/claude_md_taille.py\"" },
-      { "type": "command", "command": "\"<python.exe>\" \"<…>/.claude/hooks/suivi_taille.py\"" },
-      { "type": "command", "command": "\"<python.exe>\" \"<…>/.claude/hooks/pause_longue.py\"" },
-      { "type": "command", "command": "\"<python.exe>\" \"<…>/.claude/hooks/boucle_compact.py\"" } ] },
+      { "type": "command", "command": "\"<python.exe>\" \"<…>/.claude/hooks/pause_longue.py\"" } ] },
       { "hooks": [ { "type": "command", "command": "<…>/.local/bin/claude-office-hook.exe user_prompt_submit", "timeout": 2 } ] } ],
     "SessionStart":      [ { "hooks": [ { "type": "command", "command": "<…>/.local/bin/claude-office-hook.exe session_start", "timeout": 2 } ] } ],
     "SessionEnd":        [ { "hooks": [ { "type": "command", "command": "<…>/.local/bin/claude-office-hook.exe session_end", "timeout": 2 } ] } ],
@@ -28,6 +26,6 @@
     "Stop":              [ { "hooks": [ { "type": "command", "command": "<…>/.local/bin/claude-office-hook.exe stop", "timeout": 2 } ] } ],
     "SubagentStart":     [ { "matcher": ".*", "hooks": [ { "type": "command", "command": "<…>/.local/bin/claude-office-hook.exe subagent_start", "timeout": 2 } ] } ],
     "SubagentStop":      [ { "matcher": ".*", "hooks": [ { "type": "command", "command": "<…>/.local/bin/claude-office-hook.exe subagent_stop", "timeout": 2 } ] } ],
-    "PreCompact":        [ { "hooks": [ { "type": "command", "command": "<…>/.local/bin/claude-office-hook.exe pre_compact", "timeout": 10 } ] } ]
+    "PreCompact":        [ { "hooks": [ { "type": "command", "command": "<…>/.local/bin/claude-office-hook.exe pre_compact", "timeout": 2 } ] } ]
   }
 }

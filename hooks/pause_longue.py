@@ -24,6 +24,11 @@ _p = str(data.get("prompt", "")).lstrip()
 _AUTO = ("<scheduled-task", "<task-notification", "<cross-session-message", "[Cross-session",
          "Another Claude session", "The coordinator sent", "<<autonomous-loop", "<side-sessions-event",
          "<ci-monitor-event", "<system-reminder", "[SYSTEM NOTIFICATION", "<command-name>", "<loop")
+# Passation / sauvegarde : ecrire le SUIVI ou la note de passation doit toujours passer du premier coup
+# (c'est justement ce qu'on veut faire apres une pause) ; meme chose pour /compact et /clear.
+_low = _p.lower()
+if "passation" in _low[:300] or "suivi.md" in _low[:300] or _low.startswith(("/compact", "/clear")):
+    sys.exit(0)
 if _p.startswith(_AUTO) or "<cross-session-message" in _p or "This is an automated run" in _p[:400]:
     sys.exit(0)
 
