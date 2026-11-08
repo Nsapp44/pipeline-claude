@@ -4,8 +4,8 @@ description: À lancer sur demande (jamais automatiquement) pour traquer les err
 tools: Read, Grep, Glob
 model: sonnet
 skills:
-  - engineering:debug
-  - engineering:code-review
+  - debug
+  - code-review
 effort: medium
 ---
 

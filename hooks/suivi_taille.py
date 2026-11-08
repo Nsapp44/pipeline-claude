@@ -6,7 +6,7 @@ import os
 import sys
 import tempfile
 
-LIMITE = 8_000  # octets (decide avec Nolann le 28/10/2026)
+LIMITE = 8_000  # octets (decide avec l'utilisateur le 28/10/2026)
 
 try:
     data = json.load(sys.stdin)

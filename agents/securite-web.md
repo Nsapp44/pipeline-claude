@@ -4,8 +4,8 @@ description: À lancer sur demande, avant une mise en ligne d'un jeu ou site web
 tools: Read, Grep, Glob
 model: sonnet
 skills:
-  - engineering:code-review
-  - engineering:deploy-checklist
+  - code-review
+  - deploy-checklist
 effort: medium
 ---
 

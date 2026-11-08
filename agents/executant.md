@@ -2,6 +2,7 @@
 name: executant
 description: OBLIGATOIRE pour ÉCRIRE ou corriger le code d'une partie déjà conçue (nouvelle classe, fonction, bloc de tests ou de doc de plus de ~30 lignes) d'après une consigne précise (fichier, signatures, comportement, contraintes, ce qu'il rend). Le fil principal n'écrit lui-même que les petites retouches (moins de ~30 lignes) et relit la diff avant de dire « fait ». Plusieurs morceaux indépendants (fichiers différents) = plusieurs executant en parallèle. Pour lancer les tests, lint, captures ou commandes longues : agent testeur. Ne l'utilise pas pour concevoir ou trancher.
 tools: Read, Grep, Glob, Edit, Write, Bash, PowerShell
+skills: tiktok-compte, montage-histoires
 model: sonnet
 ---
 

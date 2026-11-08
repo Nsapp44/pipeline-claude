@@ -4,9 +4,11 @@ description: Seul agent Opus. À APPELER (sans attendre de « se sentir bloqué 
 tools: Read, Grep, Glob, Bash, PowerShell, Write
 model: opus
 skills:
-  - engineering:architecture
-  - engineering:system-design
-  - engineering:tech-debt
+  - architecture
+  - system-design
+  - tech-debt
+  - blender-anim-web
+  - rendu-360-maquettes
 effort: medium
 ---
 

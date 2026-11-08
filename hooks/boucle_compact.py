@@ -1,5 +1,5 @@
 # Hook UserPromptSubmit : detecte une boucle de compaction (>= 2 compactions en moins de 15 min) et demande a
-# Claude de proposer la passation (skill `passation`) a Nolann au lieu de continuer a compacter. Une seule alerte
+# Claude de proposer la passation (skill `passation`) a l'utilisateur au lieu de continuer a compacter. Une seule alerte
 # par compaction. Ne bloque jamais le message.
 import json
 import os
@@ -48,6 +48,6 @@ print(json.dumps({"hookSpecificOutput": {"hookEventName": "UserPromptSubmit", "a
     "BOUCLE DE COMPACTION detectee : deux compactions a moins de 15 min d'ecart (le contexte repart trop haut "
     "pour tenir sous le seuil). Compacter encore ne sert a rien. Ne pose AUCUNE question : reecris SUIVI.md "
     "propre si ce n'est pas fait, puis FAIS la passation toi-meme (skill `passation`, mode autonome, sans pop-up) et continue a "
-    "travailler dans la nouvelle conversation. Dis-le a Nolann en une ligne apres coup. "
+    "travailler dans la nouvelle conversation. Dis-le a l'utilisateur en une ligne apres coup. "
     "Si la creation est refusee, ecris SUIVI.md et continue.")}}))
 sys.exit(0)

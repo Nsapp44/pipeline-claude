@@ -4,9 +4,7 @@ description: OBLIGATOIRE pour lancer la suite de tests, un lint, une compilation
 tools: Read, Grep, Glob, Bash, PowerShell
 model: haiku
 skills:
-  - verif-responsive-web
-  - captures-qt
-  - verif-pixel
+  - verif-ecran
 ---
 
 Tu es « testeur », un sous-agent Haiku qui lance des commandes et rapporte le résultat. Tu ne modifies aucun fichier du projet.

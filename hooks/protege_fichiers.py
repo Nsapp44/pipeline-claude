@@ -44,11 +44,11 @@ def main():
     entree = data.get("tool_input") or {}
     if outil in ("Write", "Edit", "NotebookEdit"):
         if est_env(entree.get("file_path", "")):
-            decision("deny", "Écriture dans un fichier .env bloquée par le garde-fou (secrets). À faire par Nolann.")
+            decision("deny", "Écriture dans un fichier .env bloquée par le garde-fou (secrets). À faire par l'utilisateur.")
     elif outil in ("Bash", "PowerShell"):
         cmd = entree.get("command", "")
         if ECRIT_ENV.search(cmd):
-            decision("deny", "Écriture dans un fichier .env bloquée par le garde-fou (secrets). À faire par Nolann.")
+            decision("deny", "Écriture dans un fichier .env bloquée par le garde-fou (secrets). À faire par l'utilisateur.")
         if RM_RECURSIF.search(cmd):
             decision("ask", "Suppression récursive détectée : confirmer avant d'exécuter.")
 

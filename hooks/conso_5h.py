@@ -1,4 +1,4 @@
-"""Status line Claude Code : relève la conso 5 h / 7 j pour Bureau entreprise.
+"""Status line Claude Code : relève la conso 5 h / 7 j pour une appli interne.
 
 Claude Code envoie sur stdin un JSON contenant rate_limits (abonnés Pro/Max).
 On l'écrit dans ~/.claude/bureau_conso.json (lu par le panneau mural) et on
